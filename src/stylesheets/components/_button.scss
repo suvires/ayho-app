@@ -1,3 +1,82 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the button component.
 // -----------------------------------------------------------------------------
+
+.btn {
+  cursor: pointer;
+  border-radius: 2rem;
+  padding: 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  &:hover,
+  &:focus,
+  &:focus-within,
+  &:active {
+    text-decoration: none;
+  }
+
+  &--transparent {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: #fff;
+    }
+  }
+
+  &--primary {
+    background-color: $brand-color;
+    background: linear-gradient(to left, $brand-color, $secondary-brand-color);
+    border: transparent;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    color: #fff;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: #fff;
+    }
+
+    &[disabled] {
+      color: $mid-grey;
+      background: $light-grey;
+
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+
+  &--secondary {
+    background-color: #fff;
+    border: transparent;
+    color: $brand-color;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: $brand-color;
+    }
+
+    &[disabled] {
+      color: $mid-grey;
+      background: $light-grey;
+
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+}

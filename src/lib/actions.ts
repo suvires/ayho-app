@@ -94,7 +94,7 @@ export async function createUser(prevState: any, formData: FormData) {
     };
   }
 
-  const role = ROLE.EMPLOYER;
+  const role = ROLE.EMPLOYEE;
 
   try {
     const res = await fetch(

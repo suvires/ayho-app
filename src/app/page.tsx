@@ -12,8 +12,7 @@ export default function Home() {
         priority
       />
       <Link href="https://empresas.ayho.app">Soy una empresa</Link>
-      <Link href="/signin">Iniciar sesión</Link>
-      <Link href="/signup">Crear una cuenta</Link>
+      <Link href="/auth">Busco trabajo</Link>
     </main>
   );
 }

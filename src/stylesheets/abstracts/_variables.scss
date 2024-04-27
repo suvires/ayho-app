@@ -2,21 +2,13 @@
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
 
-
-
-
-
 /// Regular font family
 /// @type List
-$text-font-stack: 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+// $text-font-stack: 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
 
 /// Code (monospace) font family
 /// @type List
-$code-font-stack: 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Monaco', monospace !default;
-
-
-
-
+// $code-font-stack: 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Monaco', monospace !default;
 
 /// Copy text color
 /// @type Color
@@ -24,7 +16,11 @@ $text-color: rgb(34, 34, 34) !default;
 
 /// Main brand color
 /// @type Color
-$brand-color: rgb(229, 0, 80) !default;
+$brand-color: rgb(168, 87, 209) !default;
+
+/// Secondary brand color
+/// @type Color
+$secondary-brand-color: rgb(55, 155, 220) !default;
 
 /// Light grey
 /// @type Color
@@ -38,34 +34,37 @@ $mid-grey: rgb(153, 153, 153) !default;
 /// @type Color
 $dark-grey: rgb(68, 68, 68) !default;
 
+/// Red
+/// @type Color
+$red: rgb(255, 0, 0) !default;
 
+/// Text color
+/// @type Color
+$text-color: $dark-grey !default;
 
+///Buttons shadow
+/// @type Shadow
+$shadow-button: rgba(0, 0, 0, 0.2) 0px 4px 12px;
 
+///Cards shadow
+/// @type Shadow
+$shadow-card: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
 /// Container's maximum width
 /// @type Length
 $max-width: 1180px !default;
 
-
-
-
-
 /// Breakpoints map
 /// @prop {String} keys - Keys are identifiers mapped to a given length
 /// @prop {Map} values - Values are actual breakpoints expressed in pixels
 $breakpoints: (
-  'small': 320px,
-  'medium': 768px,
-  'large': 1024px,
+  "small": 320px,
+  "medium": 768px,
+  "large": 1024px,
 ) !default;
-
-
-
-
-
 
 /// Relative or absolute URL where all assets are served from
 /// @type String
 /// @example scss - When using a CDN
 ///   $base-url: 'https://cdn.example.com/assets/';
-$base-url: '/assets/' !default;
+$base-url: "/assets/" !default;
