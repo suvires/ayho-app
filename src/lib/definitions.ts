@@ -40,7 +40,13 @@ export type Offer = {
   id: number;
   title: string;
   description: string;
-  company_id: number;
+  salary: number;
+  positions: Position[];
+  skills: Skill[];
+  places: Place[];
+  attendance: Attendance;
+  schedule: Schedule;
+  company: Company;
 };
 
 export type Attendance = {
@@ -66,4 +72,9 @@ export type Skill = {
 export type Place = {
   id: number;
   name: string;
+};
+
+export type Match = {
+  id: number;
+  offer: Offer;
 };

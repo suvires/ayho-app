@@ -14,6 +14,7 @@ import {
   PROFILE_MAX_SKILLS,
 } from "@/constants";
 import { AuthError } from "next-auth";
+import { json } from "stream/consumers";
 
 const authenticateSchema = z.object({
   email: z
@@ -95,7 +96,7 @@ export async function createUser(prevState: any, formData: FormData) {
     };
   }
 
-  const role = ROLE.EMPLOYEE;
+  const role = ROLE.CANDIDATE;
 
   try {
     const res = await fetch(
@@ -235,6 +236,92 @@ export async function createProfile(prevState: any, formData: FormData) {
       message: "Create profile error: " + error.message,
     };
   }
+  redirect("/offers");
+}
 
+export async function likeOffer(offerId: number) {
+  const session = await auth();
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/${API_ROUTES.LIKE_OFFER}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session!.accessToken}`,
+        },
+        body: JSON.stringify({
+          offer_id: offerId,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error("API error:" + errorData.message);
+    }
+  } catch (error: any) {
+    return {
+      message: "Like offer error: " + error.message,
+    };
+  }
+
+  revalidatePath("/offers");
+  redirect("/offers");
+}
+
+export async function dislikeOffer(offerId: number) {
+  const session = await auth();
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/${API_ROUTES.DISLIKE_OFFER}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session!.accessToken}`,
+        },
+        body: JSON.stringify({
+          offer_id: offerId,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error("API error:" + errorData.message);
+    }
+  } catch (error: any) {
+    return {
+      message: "Dislike offer error: " + error.message,
+    };
+  }
+
+  revalidatePath("/offers");
+  redirect("/offers");
+}
+
+export async function undo() {
+  const session = await auth();
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/${API_ROUTES.UNDO_OFFER}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session!.accessToken}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error("API error:" + errorData.message);
+    }
+  } catch (error: any) {
+    return {
+      message: "Undo error: " + error.message,
+    };
+  }
+
+  revalidatePath("/offers");
   redirect("/offers");
 }

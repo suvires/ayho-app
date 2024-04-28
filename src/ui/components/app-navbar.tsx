@@ -11,17 +11,18 @@ export function AppNavbar() {
         <li>
           <Link
             className={
-              "icon-offers " + (pathname === "/offers" ? "active" : "")
+              "icon-offers " + (pathname.startsWith("/offers") ? "active" : "")
             }
             href="/offers"
           >
-            <span className="visually-hidden">Offers</span>
+            <span className="visually-hidden">Ofertas</span>
           </Link>
         </li>
         <li>
           <Link
             className={
-              "icon-matches " + (pathname === "/matches" ? "active" : "")
+              "icon-matches " +
+              (pathname.startsWith("/matches") ? "active" : "")
             }
             href="/matches"
           >
@@ -31,21 +32,23 @@ export function AppNavbar() {
         <li>
           <Link
             className={
-              "icon-messages " + (pathname === "/messages" ? "active" : "")
+              "icon-messages " +
+              (pathname.startsWith("/messages") ? "active" : "")
             }
             href="/messages"
           >
-            <span className="visually-hidden">Messages</span>
+            <span className="visually-hidden">Mensajes</span>
           </Link>
         </li>
         <li>
           <Link
             className={
-              "icon-profile " + (pathname === "/profile" ? "active" : "")
+              "icon-profile " +
+              (pathname.startsWith("/profile") ? "active" : "")
             }
             href="/profile"
           >
-            <span className="visually-hidden">Profile</span>
+            <span className="visually-hidden">Perfil</span>
           </Link>
         </li>
       </ul>

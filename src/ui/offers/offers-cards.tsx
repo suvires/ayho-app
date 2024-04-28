@@ -1,8 +1,14 @@
-import { Offer } from "@/lib/definitions";
+import { Offer, User } from "@/lib/definitions";
 import Link from "next/link";
-import OfferItem from "./offer-item";
+import OfferCard from "./offer-card";
 
-export default function OffersList({ offers }: { offers: Offer[] }) {
+export default function OffersCards({
+  offers,
+  user,
+}: {
+  offers: Offer[];
+  user: User;
+}) {
   if (offers.length === 0)
     return (
       <div>
@@ -10,10 +16,10 @@ export default function OffersList({ offers }: { offers: Offer[] }) {
       </div>
     );
   return (
-    <ul>
+    <ul className="offers-cards">
       {offers.map((offer: Offer) => (
         <li key={offer.id}>
-          <OfferItem offer={offer} />
+          <OfferCard offer={offer} user={user} />
         </li>
       ))}
     </ul>

@@ -3,10 +3,46 @@
 import { auth } from "@/auth";
 import { API_ROUTES } from "@/constants";
 
-export async function getMyCompanyOffers() {
+export async function getMatches() {
   const session = await auth();
   const res = await fetch(
-    `${process.env.BACKEND_URL}/${API_ROUTES.GET_COMPANY_OFFERS}`,
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_MATCHES}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session!.accessToken}`,
+      },
+    }
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+
+export async function getMatch(matchId: string) {
+  const session = await auth();
+  const res = await fetch(
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_MATCH}/${matchId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session!.accessToken}`,
+      },
+    }
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+
+export async function getOffers() {
+  const session = await auth();
+  const res = await fetch(
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_USER_OFFERS}`,
     {
       method: "GET",
       headers: {

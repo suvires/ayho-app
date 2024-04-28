@@ -33,7 +33,7 @@ async function getUser(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, role: ROLE.EMPLOYEE }),
+        body: JSON.stringify({ email, password, role: ROLE.CANDIDATE }),
       }
     );
     if (!res.ok) {

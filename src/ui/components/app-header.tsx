@@ -8,7 +8,7 @@ export function AppHeader() {
           src="/images/logo.png"
           width={107}
           height={40}
-          alt="Logo de ayho"
+          alt="Logotipo de ayho"
           priority={true}
         />
       </h1>

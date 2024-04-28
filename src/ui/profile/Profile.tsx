@@ -3,13 +3,12 @@ import { User } from "@/lib/definitions";
 import Link from "next/link";
 
 export function ProfileView({ user }: { user: User }) {
-  console.log(user);
   return (
     <>
       <ProfileImage
         src={
           (user.profile.image_url &&
-            `${process.env.BACKEND_URL}/${user.profile.image_url}`) ||
+            `${process.env.BACKEND_URL}${user.profile.image_url}`) ||
           "/images/avatar.png"
         }
       />

@@ -15,7 +15,8 @@
 // 5. Components
 @import "components/button", "components/back", "components/form",
   "components/progress-bar", "components/range", "components/tags",
-  "components/profile-image", "components/navbar";
+  "components/profile-image", "components/navbar", "components/card",
+  "components/offers-cards", "components/matches";
 
 // 6. Page-specific styles
 @import "pages/home", "pages/auth";

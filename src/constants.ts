@@ -1,6 +1,6 @@
 export const ROLE = {
-  EMPLOYER: "Employer",
-  EMPLOYEE: "Employee",
+  RECRUITER: "Recruiter",
+  CANDIDATE: "Candidate",
 };
 export const CREATE_PROFILE_STEPS = 7;
 export const PLACES_ANYPLACE_ID = 53;
@@ -14,8 +14,12 @@ export const API_ROUTES = {
   SIGN_UP: "api/auth/signup",
   CREATE_PROFILE: "api/create-profile",
   GET_USER: "api/auth/me",
-  GET_COMPANY_OFFERS: "api/offers/mycompany",
-  CREATE_OFFER: "api/create-offer",
+  GET_USER_OFFERS: "api/get-offers",
+  LIKE_OFFER: "api/offer/like",
+  DISLIKE_OFFER: "api/offer/dislike",
+  UNDO_OFFER: "api/offer/undo",
+  GET_MATCH: "api/get-match",
+  GET_MATCHES: "api/get-matches",
   GET_ATTENDANCES: "api/attendances",
   GET_SCHEDULES: "api/schedules",
   GET_POSITIONS: "api/positions",

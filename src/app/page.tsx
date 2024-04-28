@@ -6,7 +6,7 @@ export default function Home() {
     <main>
       <Image
         src="/images/logo.png"
-        alt="Ayho Logo"
+        alt="Logotipo de ayho"
         width={346}
         height={129}
         priority
