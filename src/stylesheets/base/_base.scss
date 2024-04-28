@@ -46,3 +46,39 @@ a {
     text-decoration: underline;
   }
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+label {
+  display: block;
+  font-weight: 500;
+  color: $text-color;
+  font-family: $secondary-font-stack;
+  margin: 0.8rem 0;
+  font-size: 1.3rem;
+  line-height: 1.4rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  font-family: $text-font-stack;
+  font-size: 1rem;
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:-webkit-autofill::first-line,
+input:-internal-autofill-selected {
+  -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+  font-size: 1rem !important;
+}

@@ -10,6 +10,8 @@ import {
   API_ROUTES,
   MAX_UPLOAD_SIZE,
   ACCEPTED_IMAGE_TYPES,
+  PROFILE_MAX_POSITIONS,
+  PROFILE_MAX_SKILLS,
 } from "@/constants";
 import { AuthError } from "next-auth";
 
@@ -55,8 +57,7 @@ export async function authenticate(prevState: any, formData: FormData) {
     }
     throw error;
   }
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect("/offers");
 }
 
 const createUserSchema = z.object({
@@ -124,12 +125,41 @@ export async function createUser(prevState: any, formData: FormData) {
   await authenticate(prevState, formData);
 }
 
-const createCompanySchema = z.object({
-  name: z.string().min(1, "El nombre es obligatorio"),
-  description: z.string().min(1, "La descripción es obligatoria"),
+const createProfileSchema = z.object({
+  linkedin: z
+    .string()
+    .min(1, { message: "El perfil de LindikedIn es obligatorio" }),
+  salary: z.string().refine((val: any) => Number(val) > 0, {
+    message: "Las expectativas salariales son obligatorias",
+  }),
+  positions: z
+    .array(z.string())
+    .nonempty({
+      message: "Selecciona al menos un puesto",
+    })
+    .max(PROFILE_MAX_POSITIONS, {
+      message: "Solo puedes seleccionar hasta 3 puestos",
+    }),
+  skills: z
+    .array(z.string())
+    .nonempty({
+      message: "Selecciona al menos una habilidad",
+    })
+    .max(PROFILE_MAX_SKILLS, {
+      message: "Solo puedes seleccionar hasta 7 habilidades",
+    }),
+  places: z.array(z.string()).nonempty({
+    message: "Selecciona al menos una ciudad",
+  }),
+  schedules: z.array(z.string()).nonempty({
+    message: "Selecciona al menos un tipo jornada",
+  }),
+  attendances: z.array(z.string()).nonempty({
+    message: "Selecciona al menos una modalidad",
+  }),
   image: z
     .any()
-    .refine((file: File) => file?.size !== 0, "El logotipo es obligatorio")
+    .refine((file: File) => file?.size !== 0, "La imagen es obligatoria")
     .refine((file) => {
       return (
         !file ||
@@ -142,14 +172,24 @@ const createCompanySchema = z.object({
     ),
 });
 
-export async function createCompany(prevState: any, formData: FormData) {
-  const name = formData.get("company_name");
-  const description = formData.get("company_description");
-  const image = formData.get("company_image");
+export async function createProfile(prevState: any, formData: FormData) {
+  const linkedin = formData.get("linkedin");
+  const salary = formData.get("salary");
+  const positions = formData.getAll("positions");
+  const skills = formData.getAll("skills");
+  const places = formData.getAll("places");
+  const schedules = formData.getAll("schedules");
+  const attendances = formData.getAll("attendances");
+  const image = formData.get("image");
 
-  const validatedFields = createCompanySchema.safeParse({
-    name,
-    description,
+  const validatedFields = createProfileSchema.safeParse({
+    linkedin,
+    salary,
+    positions,
+    skills,
+    places,
+    schedules,
+    attendances,
     image,
   });
 
@@ -165,11 +205,16 @@ export async function createCompany(prevState: any, formData: FormData) {
 
   try {
     const bodyFormData = new FormData();
-    bodyFormData.append("name", name as string);
-    bodyFormData.append("description", description as string);
+    bodyFormData.append("linkedin", linkedin as string);
+    bodyFormData.append("salary", salary as string);
+    bodyFormData.append("positions", JSON.stringify(positions));
+    bodyFormData.append("skills", JSON.stringify(skills));
+    bodyFormData.append("places", JSON.stringify(places));
+    bodyFormData.append("schedules", JSON.stringify(schedules));
+    bodyFormData.append("attendances", JSON.stringify(attendances));
     bodyFormData.append("image", image as File);
     const res = await fetch(
-      `${process.env.BACKEND_URL}/${API_ROUTES.CREATE_COMPANY}`,
+      `${process.env.BACKEND_URL}/${API_ROUTES.CREATE_PROFILE}`,
       {
         method: "POST",
         headers: {
@@ -187,94 +232,9 @@ export async function createCompany(prevState: any, formData: FormData) {
     }
   } catch (error: any) {
     return {
-      message: "Create company error: " + error.message,
+      message: "Create profile error: " + error.message,
     };
   }
 
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
-}
-
-const createOfferSchema = z.object({
-  title: z.string().min(1, "El título es obligatorio"),
-  description: z.string().min(1, "La descripción es obligatoria"),
-  salary: z
-    .string()
-    .min(1, "El salario es obligatorio")
-    .refine((val: any) => !isNaN(val), {
-      message: "El salario solo debe tener números",
-    }),
-  attendance_id: z.string().min(1, "La modalidad es obligatoria"),
-  schedule_id: z.string().min(1, "La jornada es obligatoria"),
-  skills: z.array(z.string()).min(1, "Selecciona al menos una habilidad"),
-  places: z.array(z.string()).min(1, "Selecciona al menos un lugar"),
-  positions: z.array(z.string()).min(1, "Selecciona al menos un rol"),
-});
-
-export async function createOffer(prevState: any, formData: FormData) {
-  const title = formData.get("title");
-  const description = formData.get("description");
-  const salary = formData.get("salary");
-  const attendance_id = formData.get("attendance_id");
-  const schedule_id = formData.get("schedule_id");
-  const positions = formData.getAll("positions");
-  const skills = formData.getAll("skills");
-  const places = formData.getAll("places");
-
-  const validatedFields = createOfferSchema.safeParse({
-    title,
-    description,
-    salary,
-    attendance_id,
-    schedule_id,
-    positions,
-    skills,
-    places,
-  });
-  if (!validatedFields.success) {
-    return {
-      ...prevState,
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Revisa los errores de validación",
-    };
-  }
-
-  const session = await auth();
-
-  try {
-    const res = await fetch(
-      `${process.env.BACKEND_URL}/${API_ROUTES.CREATE_OFFER}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session!.accessToken}`,
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          salary,
-          attendance_id,
-          schedule_id,
-          positions,
-          skills,
-          places,
-        }),
-      }
-    );
-    if (!res.ok) {
-      const errorData = await res.json();
-      return {
-        ...prevState,
-        message: "API Error: " + errorData,
-      };
-    }
-  } catch (error: any) {
-    return {
-      message: "Create offer Error: " + error.message,
-    };
-  }
-
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect("/offers");
 }

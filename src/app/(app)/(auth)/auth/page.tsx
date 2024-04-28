@@ -1,8 +1,8 @@
-import { LinkButton } from "@/ui/LinkButton";
 import Image from "next/image";
+import Link from "next/link";
 export default function AuthPage() {
   return (
-    <main className="auth">
+    <main className="app auth">
       <section className="auth-wrapper">
         <h1>
           <Image
@@ -13,14 +13,14 @@ export default function AuthPage() {
             priority={true}
           />
         </h1>
-        <nav>
-          <LinkButton styling="secondary" href="/signup">
+        <div className="buttons">
+          <Link className="btn btn--secondary" href="/signin">
             Ya tengo una cuenta
-          </LinkButton>
-          <LinkButton styling="transparent" href="/signin">
+          </Link>
+          <Link className="btn btn--transparent" href="/signup">
             Crear una cuenta
-          </LinkButton>
-        </nav>
+          </Link>
+        </div>
       </section>
     </main>
   );

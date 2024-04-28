@@ -6,7 +6,7 @@ export default function OffersList({ offers }: { offers: Offer[] }) {
   if (offers.length === 0)
     return (
       <div>
-        <Link href="dashboard/offers/create">Publica tu primera oferta</Link>
+        <Link href="/offers/create">Publica tu primera oferta</Link>
       </div>
     );
   return (

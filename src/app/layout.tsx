@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
+import { Raleway } from "next/font/google";
 import { Montserrat } from "next/font/google";
 import "@/stylesheets/main.scss";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const primaryFont = Raleway({
+  subsets: ["latin"],
+  variable: "--font-primary",
+});
+
+const secondaryFont = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-secondary",
+});
 
 export const metadata: Metadata = {
   title: "Ayho",
@@ -16,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={montserrat.className}>{children}</body>
+      <body className={`${primaryFont.variable} ${secondaryFont.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }

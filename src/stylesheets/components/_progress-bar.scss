@@ -1,0 +1,16 @@
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  background-color: $brand-color;
+  background: linear-gradient(to left, $brand-color, $secondary-brand-color);
+  z-index: 99998;
+  span {
+    background: #fff;
+    height: 4px;
+    transition: width 0.2s ease-in-out;
+  }
+}

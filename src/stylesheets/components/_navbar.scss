@@ -1,0 +1,54 @@
+.app-navbar {
+  ul {
+    padding: 0;
+    margin: 0;
+    margin-top: auto;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+
+    a {
+      background-color: $mid-grey;
+      display: flex;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      height: 2rem;
+      width: 2rem;
+
+      &.icon-offers {
+        mask-image: url("/images/icons/offers.svg");
+        -webkit-mask-image: url("/images/icons/offers.svg");
+      }
+
+      &.icon-matches {
+        mask-image: url("/images/icons/matches.svg");
+        -webkit-mask-image: url("/images/icons/matches.svg");
+      }
+
+      &.icon-messages {
+        mask-image: url("/images/icons/messages.svg");
+        -webkit-mask-image: url("/images/icons/messages.svg");
+      }
+
+      &.icon-profile {
+        mask-image: url("/images/icons/profile.svg");
+        -webkit-mask-image: url("/images/icons/profile.svg");
+      }
+
+      &:hover,
+      &.active {
+        background: $brand-color;
+        background: linear-gradient(
+          -135deg,
+          $secondary-brand-color 0%,
+          $brand-color 100%
+        );
+      }
+
+      img {
+        height: 2rem;
+        width: 2rem;
+      }
+    }
+  }
+}

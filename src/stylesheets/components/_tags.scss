@@ -1,0 +1,47 @@
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-family: $secondary-font-stack;
+  padding: 0;
+  li {
+    border-radius: 9999rem;
+    border: 1px solid $text-color;
+    overflow: hidden;
+
+    span,
+    label {
+      padding: 0.6rem !important;
+      font-size: 0.9rem !important;
+      line-height: 0.9rem !important;
+      font-weight: 300 !important;
+      margin: 0 !important;
+      color: $text-color !important;
+      display: block;
+    }
+
+    label {
+      cursor: pointer;
+
+      input[type="checkbox"] {
+        display: none;
+      }
+    }
+
+    &.active {
+      border-color: $brand-color;
+      label,
+      span {
+        color: $brand-color !important;
+      }
+    }
+
+    &.disabled {
+      border: 1px solid $mid-grey;
+      label,
+      span {
+        color: $mid-grey !important;
+      }
+    }
+  }
+}

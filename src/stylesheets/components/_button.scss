@@ -12,6 +12,11 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  font-family: $secondary-font-stack;
+  letter-spacing: 0.1rem;
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 300;
 
   &:hover,
   &:focus,
@@ -48,14 +53,14 @@
       color: #fff;
     }
 
-    &[disabled] {
-      color: $mid-grey;
-      background: $light-grey;
+    // &[disabled] {
+    //   color: $mid-grey;
+    //   background: $light-grey;
 
-      &:hover {
-        cursor: default;
-      }
-    }
+    //   &:hover {
+    //     cursor: default;
+    //   }
+    // }
   }
 
   &--secondary {
@@ -70,13 +75,13 @@
       color: $brand-color;
     }
 
-    &[disabled] {
-      color: $mid-grey;
-      background: $light-grey;
+    // &[disabled] {
+    //   color: $mid-grey;
+    //   background: $light-grey;
 
-      &:hover {
-        cursor: default;
-      }
-    }
+    //   &:hover {
+    //     cursor: default;
+    //   }
+    // }
   }
 }

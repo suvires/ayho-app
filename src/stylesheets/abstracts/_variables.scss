@@ -4,11 +4,11 @@
 
 /// Regular font family
 /// @type List
-// $text-font-stack: 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+$text-font-stack: var(--font-primary) !default;
 
-/// Code (monospace) font family
+/// Secondary font family
 /// @type List
-// $code-font-stack: 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Monaco', monospace !default;
+$secondary-font-stack: var(--font-secondary) !default;
 
 /// Copy text color
 /// @type Color

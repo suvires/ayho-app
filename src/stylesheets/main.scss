@@ -10,10 +10,12 @@
 @import "base/base", "base/fonts", "base/typography", "base/helpers";
 
 // 4. Layout-related sections
-@import "layout/header", "layout/footer";
+@import "layout/app-header", "layout/footer", "layout/app";
 
 // 5. Components
-@import "components/button";
+@import "components/button", "components/back", "components/form",
+  "components/progress-bar", "components/range", "components/tags",
+  "components/profile-image", "components/navbar";
 
 // 6. Page-specific styles
 @import "pages/home", "pages/auth";

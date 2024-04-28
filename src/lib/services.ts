@@ -21,18 +21,15 @@ export async function getMyCompanyOffers() {
   return res.json();
 }
 
-export async function getProfile() {
+export async function getUser() {
   const session = await auth();
-  const res = await fetch(
-    `${process.env.BACKEND_URL}/${API_ROUTES.GET_PROFILE}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session!.accessToken}`,
-      },
-    }
-  );
+  const res = await fetch(`${process.env.BACKEND_URL}/${API_ROUTES.GET_USER}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session!.accessToken}`,
+    },
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
