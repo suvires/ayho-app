@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { z } from "zod";
-import { createProfile } from "@/lib/actions";
+import { updateProfile } from "@/lib/actions";
 import { ProgressBar } from "@/ui/components/progress-bar";
 import {
   PROFILE_MAX_POSITIONS,
@@ -21,6 +21,7 @@ import {
 } from "@/lib/definitions";
 import { ProfileImage } from "../components/profile-image";
 import { readFileAsDataURL } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface FormErrors {
   linkedin?: string[];
@@ -33,7 +34,7 @@ interface FormErrors {
   image?: string[];
 }
 
-export default function CreateProfileForm({
+export default function EditProfileForm({
   user,
   attendances,
   schedules,
@@ -48,21 +49,36 @@ export default function CreateProfileForm({
   positions: Position[];
   skills: Skill[];
 }) {
+  const router = useRouter();
   const initialState = { message: "", errors: {} };
-  const [state, dispatch] = useFormState(createProfile, initialState);
+  const [state, dispatch] = useFormState(updateProfile, initialState);
   const lastStep = CREATE_PROFILE_STEPS;
-  const [currentStep, setCurrentStep] = useState(0);
-  const [linkedinValue, setLinkedinValue] = useState("");
+  const [currentStep, setCurrentStep] = useState(1);
+  const [linkedinValue, setLinkedinValue] = useState(user.profile.linkedin);
   const salaryRangeRef = useRef<HTMLInputElement>(null);
   const salaryOutputRef = useRef<HTMLOutputElement>(null);
-  const [salaryValue, setSalaryValue] = useState("0");
-  const [positionsValue, setPositionsValue] = useState<number[]>([]);
-  const [skillsValue, setSkillsValue] = useState<number[]>([]);
-  const [placesValue, setPlacesValue] = useState<number[]>([]);
-  const [schedulesValue, setSchedulesValue] = useState<number[]>([]);
-  const [attendancesValue, setAttendancesValue] = useState<number[]>([]);
+  const [salaryValue, setSalaryValue] = useState(
+    user.profile.salary.toString()
+  );
+  const initialPositions = user.positions.map((position) => position.id);
+  const [positionsValue, setPositionsValue] =
+    useState<number[]>(initialPositions);
+  const initialSkills = user.skills.map((skill) => skill.id);
+  const [skillsValue, setSkillsValue] = useState<number[]>(initialSkills);
+  const initialPlaces = user.places.map((place) => place.id);
+  const [placesValue, setPlacesValue] = useState<number[]>(initialPlaces);
+  const initialSchedules = user.schedules.map((schedule) => schedule.id);
+  const [schedulesValue, setSchedulesValue] =
+    useState<number[]>(initialSchedules);
+  const initialAttendances = user.attendances.map(
+    (attendance) => attendance.id
+  );
+  const [attendancesValue, setAttendancesValue] =
+    useState<number[]>(initialAttendances);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [previewImage, setPreviewImage] = useState("");
+  const initialImage = `${process.env.NEXT_PUBLIC_BACKEND_URL}${user.profile.image_url}`;
+  console.log(initialImage);
+  const [previewImage, setPreviewImage] = useState(initialImage);
 
   useEffect(() => {
     if (salaryValue && salaryOutputRef.current) {
@@ -160,6 +176,10 @@ export default function CreateProfileForm({
   };
 
   const handleStep = (step: number) => {
+    if (currentStep === 1 && step === -1) {
+      router.back();
+      return;
+    }
     if (step > 0) {
       const formSchema = z.object({
         linkedin: z
@@ -258,41 +278,17 @@ export default function CreateProfileForm({
 
   return (
     <>
-      {currentStep > 0 && (
-        <Image
-          src="/images/icons/back.png"
-          width={32}
-          height={60}
-          alt="Atrás"
-          className="back"
-          priority={true}
-          onClick={() => handleStep(-1)}
-        />
-      )}
+      <Image
+        src="/images/icons/back.png"
+        width={32}
+        height={60}
+        alt="Atrás"
+        className="back"
+        priority={true}
+        onClick={() => handleStep(-1)}
+      />
       <ProgressBar progress={(100 / lastStep) * currentStep} />
       <form className="form" action={dispatch}>
-        <div
-          className={`step ${currentStep > 0 ? "step--past" : ""} ${
-            currentStep === 0 ? "step--current" : ""
-          } ${currentStep < 0 ? "step--future" : ""}`}
-        >
-          <div className="form-group">
-            <h2>¡Hola, {user.name}!</h2>
-            <p>Antes de empezar a encontrar ofertas, completa tu perfil.</p>
-          </div>
-          <div className="form-footer">
-            <button
-              type="button"
-              onClick={() => {
-                handleStep(1);
-              }}
-              className="btn btn--primary"
-            >
-              Comenzar
-            </button>
-          </div>
-        </div>
-
         <div
           className={`step ${currentStep > 1 ? "step--past" : ""} ${
             currentStep === 1 ? "step--current" : ""
@@ -309,6 +305,7 @@ export default function CreateProfileForm({
                 name="linkedin"
                 type="text"
                 onChange={handleLinkedinChange}
+                defaultValue={linkedinValue}
               />
             </div>
             {errors?.linkedin &&
@@ -354,7 +351,7 @@ export default function CreateProfileForm({
                 step="1000"
                 id="salary"
                 name="salary"
-                defaultValue="0"
+                defaultValue={salaryValue}
                 onChange={handleSalaryChange}
               />
               {Number(salaryValue) > 0 && (
@@ -739,7 +736,7 @@ function FormButton() {
 
   return (
     <button className="btn btn--primary" aria-disabled={pending}>
-      Finalizar
+      Actualizar perfil
     </button>
   );
 }

@@ -44,8 +44,8 @@ export type Offer = {
   positions: Position[];
   skills: Skill[];
   places: Place[];
-  attendance: Attendance;
-  schedule: Schedule;
+  attendances: Attendance[];
+  schedules: Schedule[];
   company: Company;
 };
 

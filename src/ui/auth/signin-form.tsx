@@ -4,10 +4,16 @@ import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/lib/actions";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function SignInForm() {
   const initialState = { message: "", errors: {} };
   const [state, dispatch] = useFormState(authenticate, initialState);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleShowPasswordClick = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
@@ -39,12 +45,18 @@ export default function SignInForm() {
         </div>
         <div className="form-group">
           <label htmlFor="password">Contraseña</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Escribe tu contraseña"
-          />
+          <div className="input-password">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Escribe tu contraseña"
+            />
+            <i
+              className={showPassword ? "show-password" : ""}
+              onClick={handleShowPasswordClick}
+            ></i>
+          </div>
           {state.errors?.password &&
             state.errors.password.map((error: string, index: number) => (
               <p className="error" key={index}>

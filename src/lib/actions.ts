@@ -139,7 +139,7 @@ const createProfileSchema = z.object({
       message: "Selecciona al menos un puesto",
     })
     .max(PROFILE_MAX_POSITIONS, {
-      message: "Solo puedes seleccionar hasta 3 puestos",
+      message: `Solo puedes seleccionar hasta ${PROFILE_MAX_POSITIONS} puestos`,
     }),
   skills: z
     .array(z.string())
@@ -147,7 +147,7 @@ const createProfileSchema = z.object({
       message: "Selecciona al menos una habilidad",
     })
     .max(PROFILE_MAX_SKILLS, {
-      message: "Solo puedes seleccionar hasta 7 habilidades",
+      message: `Solo puedes seleccionar hasta ${PROFILE_MAX_SKILLS} habilidades`,
     }),
   places: z.array(z.string()).nonempty({
     message: "Selecciona al menos una ciudad",
@@ -324,4 +324,149 @@ export async function undo() {
 
   revalidatePath("/offers");
   redirect("/offers");
+}
+
+const updateProfileSchema = z.object({
+  linkedin: z
+    .string()
+    .min(1, { message: "El perfil de LindikedIn es obligatorio" }),
+  salary: z.string().refine((val: any) => Number(val) > 0, {
+    message: "Las expectativas salariales son obligatorias",
+  }),
+  positions: z
+    .array(z.string())
+    .nonempty({
+      message: "Selecciona al menos un puesto",
+    })
+    .max(PROFILE_MAX_POSITIONS, {
+      message: `Solo puedes seleccionar hasta ${PROFILE_MAX_POSITIONS} puestos`,
+    }),
+  skills: z
+    .array(z.string())
+    .nonempty({
+      message: "Selecciona al menos una habilidad",
+    })
+    .max(PROFILE_MAX_SKILLS, {
+      message: `Solo puedes seleccionar hasta ${PROFILE_MAX_SKILLS} habilidades`,
+    }),
+  places: z.array(z.string()).nonempty({
+    message: "Selecciona al menos una ciudad",
+  }),
+  schedules: z.array(z.string()).nonempty({
+    message: "Selecciona al menos un tipo jornada",
+  }),
+  attendances: z.array(z.string()).nonempty({
+    message: "Selecciona al menos una modalidad",
+  }),
+  image: z
+    .any()
+    .refine((file) => {
+      if (file.size === 0) return true;
+      return (
+        !file ||
+        (file instanceof File && ACCEPTED_IMAGE_TYPES.includes(file.type))
+      );
+    }, "El archivo debe ser PNG, JPG o JPEG")
+    .refine(
+      (file) => file?.size < MAX_UPLOAD_SIZE,
+      "La imagen debe ocupar menos de 2MB."
+    ),
+});
+
+export async function updateProfile(prevState: any, formData: FormData) {
+  const linkedin = formData.get("linkedin");
+  const salary = formData.get("salary");
+  const positions = formData.getAll("positions");
+  const skills = formData.getAll("skills");
+  const places = formData.getAll("places");
+  const schedules = formData.getAll("schedules");
+  const attendances = formData.getAll("attendances");
+  const image = formData.get("image") as File | undefined;
+
+  const validatedFields = updateProfileSchema.safeParse({
+    linkedin,
+    salary,
+    positions,
+    skills,
+    places,
+    schedules,
+    attendances,
+    image,
+  });
+
+  if (!validatedFields.success) {
+    return {
+      ...prevState,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Revisa los errores de validación",
+    };
+  }
+
+  const session = await auth();
+
+  try {
+    const bodyFormData = new FormData();
+    bodyFormData.append("linkedin", linkedin as string);
+    bodyFormData.append("salary", salary as string);
+    bodyFormData.append("positions", JSON.stringify(positions));
+    bodyFormData.append("skills", JSON.stringify(skills));
+    bodyFormData.append("places", JSON.stringify(places));
+    bodyFormData.append("schedules", JSON.stringify(schedules));
+    bodyFormData.append("attendances", JSON.stringify(attendances));
+    if (image && image.size > 0) {
+      bodyFormData.append("image", image);
+    }
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/${API_ROUTES.UPDATE_PROFILE}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session!.accessToken}`,
+        },
+        body: bodyFormData,
+      }
+    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        ...prevState,
+        message: "API error: " + errorData.message,
+      };
+    }
+  } catch (error: any) {
+    return {
+      message: "Create profile error: " + error.message,
+    };
+  }
+  redirect("/offers");
+}
+
+export async function unmatch(offerId: number) {
+  const session = await auth();
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/${API_ROUTES.DISLIKE_OFFER}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session!.accessToken}`,
+        },
+        body: JSON.stringify({
+          offer_id: offerId,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error("API error:" + errorData.message);
+    }
+  } catch (error: any) {
+    return {
+      message: "Unmatch error: " + error.message,
+    };
+  }
+
+  revalidatePath("/matches");
+  redirect("/matches");
 }

@@ -35,6 +35,7 @@
     &:focus-within,
     &:active {
       color: #fff;
+      text-decoration: none;
     }
   }
 
@@ -66,6 +67,28 @@
   &--secondary {
     background-color: #fff;
     border: transparent;
+    color: $brand-color;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: $brand-color;
+    }
+
+    // &[disabled] {
+    //   color: $mid-grey;
+    //   background: $light-grey;
+
+    //   &:hover {
+    //     cursor: default;
+    //   }
+    // }
+  }
+
+  &--tertiary {
+    background-color: #fff;
+    border: 1px solid $brand-color;
     color: $brand-color;
 
     &:hover,

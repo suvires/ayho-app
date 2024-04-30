@@ -5,7 +5,6 @@
   margin: 0 auto;
 
   label {
-    cursor: pointer;
     height: 100%;
     width: 100%;
     position: relative;
@@ -13,6 +12,7 @@
 
   &.editable {
     label {
+      cursor: pointer;
       &::before,
       &::after {
         background: linear-gradient(

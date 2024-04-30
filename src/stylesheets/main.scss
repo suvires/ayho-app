@@ -16,10 +16,11 @@
 @import "components/button", "components/back", "components/form",
   "components/progress-bar", "components/range", "components/tags",
   "components/profile-image", "components/navbar", "components/card",
-  "components/offers-cards", "components/matches";
+  "components/offers-cards", "components/matches", "components/input-password",
+  "components/empty-message", "components/submenu";
 
 // 6. Page-specific styles
-@import "pages/home", "pages/auth";
+@import "pages/home", "pages/auth", "pages/profile";
 
 // 7. Themes
 @import "themes/default";

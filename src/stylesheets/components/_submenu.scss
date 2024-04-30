@@ -1,0 +1,33 @@
+.submenu {
+  width: 24px;
+  height: 24px;
+  background-image: radial-gradient(circle, black 2px, transparent 2px);
+  background-size: 100% 33.33%;
+  cursor: copy;
+  position: relative;
+  z-index: 1000;
+  div {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 100%;
+    z-index: 1001;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #fff;
+    border: 1px solid $light-grey;
+    border-radius: 4px;
+    box-shadow: $shadow-card;
+  }
+}
+
+.submenu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: transparent;
+}

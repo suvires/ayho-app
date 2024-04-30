@@ -5,11 +5,13 @@ export default async function Page() {
   const matches = await getMatches();
   const user = await getUser();
 
-  if (!matches)
+  if (matches.length === 0)
     return (
-      <p>
-        Todavía no has hecho <i>match</i> con ninguna oferta
-      </p>
+      <div className="empty-message">
+        <p>
+          Todavía no has hecho <i>match</i> con ninguna oferta.
+        </p>
+      </div>
     );
 
   return <MatchesList matches={matches} />;

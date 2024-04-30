@@ -51,20 +51,24 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
               .replace(/\./g, " ")} €`}</span>
           </li>
 
-          <li
-            className={
-              offer.schedule.id in user.schedules ? "active" : "disabled"
-            }
-          >
-            <span>{offer.schedule.name}</span>
-          </li>
-          <li
-            className={
-              offer.attendance.id in user.attendances ? "active" : "disabled"
-            }
-          >
-            <span>{offer.attendance.name}</span>
-          </li>
+          {offer.schedules.map((schedule) => (
+            <li
+              key={`tag--place-${schedule.id}`}
+              className={schedule.id in user.schedules ? "active" : "disabled"}
+            >
+              <span>{schedule.name}</span>
+            </li>
+          ))}
+          {offer.attendances.map((attendance) => (
+            <li
+              key={`tag--place-${attendance.id}`}
+              className={
+                attendance.id in user.attendances ? "active" : "disabled"
+              }
+            >
+              <span>{attendance.name}</span>
+            </li>
+          ))}
           {offer.places.map((place) => (
             <li
               key={`tag--place-${place.id}`}
