@@ -4,18 +4,95 @@
   list-style: none;
   position: relative;
   height: calc(100% - 2rem);
-  > li {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-  }
 
   .card {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     height: 100%;
-    scroll-behavior: smooth;
+    padding: 0;
+    cursor: grab;
+    background-color: #fff;
+    position: absolute;
+    user-select: none;
+    &:nth-last-child(n + 3) {
+      display: none;
+    }
+
+    &.swipe-left,
+    &.swipe-right {
+      transition: transform 0.8s ease, rotate 0.8s ease;
+    }
+
+    &.swipe-right {
+      transform: translateX(150%) rotate(30deg);
+    }
+
+    &.swipe-left {
+      transform: translateX(-150%) rotate(-30deg);
+    }
+
+    &.go-left {
+      transform: translateX(-150%) rotate(-30deg) !important;
+    }
+
+    &.go-right {
+      transform: translateX(150%) rotate(30deg) !important;
+    }
+
+    &.go-left,
+    &.go-right {
+      transition: transform 0.3s ease, rotate 0.3s ease;
+    }
+
+    &.reset {
+      transition: transform 0.3s ease;
+      transform: translateX(0) !important;
+    }
+
+    & .choice {
+      border-radius: 8px;
+      z-index: 9999;
+      top: 32px;
+      right: 16px;
+      padding: 4px 8px;
+      font-size: 24px;
+      font-weight: bold;
+      width: fit-content;
+      position: absolute;
+      opacity: 0;
+      font-family: $secondary-font-stack;
+      color: #fff;
+      transition: opacity 0.3s ease;
+
+      &.visible {
+        opacity: 1;
+      }
+
+      &.dislike {
+        background-color: #ff6e63;
+
+        transform: rotate(30deg);
+      }
+
+      &.like {
+        background-color: #63ff68;
+        left: 16px;
+        transform: rotate(-30deg);
+      }
+    }
+
+    .offer {
+      padding: 15px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+
+      /* Ocultar scrollbar en Chrome, Safari y Opera */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
 
     .offer--company-summary {
       display: flex;
@@ -109,37 +186,33 @@
       justify-content: center;
       margin-top: 0.8rem;
       gap: 4rem;
-      form {
-        button {
-          width: 3.5rem;
-          height: 3.5rem;
-          border-radius: 50%;
-          border: 0;
-          background-color: #fff;
-          box-shadow: $shadow-button;
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center center;
-          background-color: #fff;
-          background-origin: content-box;
-          padding: 10px;
-          cursor: pointer;
-        }
-        &.offer--btn-like button {
+      button {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        border: 0;
+        background-color: #fff;
+        box-shadow: $shadow-button;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-origin: content-box;
+        padding: 10px;
+        cursor: pointer;
+
+        &.offer--btn-like {
           background-image: url("/images/icons/like.svg");
         }
-        &.offer--btn-dislike button {
+        &.offer--btn-dislike {
           background-image: url("/images/icons/dislike.svg");
         }
         &.offer--btn-undo {
           position: absolute;
           left: 0;
-          button {
-            padding: 5px;
-            width: 2.5rem;
-            height: 2.5rem;
-            background-image: url("/images/icons/undo.svg");
-          }
+          padding: 5px;
+          width: 2.5rem;
+          height: 2.5rem;
+          background-image: url("/images/icons/undo.svg");
         }
       }
     }

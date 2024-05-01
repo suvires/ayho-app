@@ -1,9 +1,8 @@
-import { getMatches, getUser } from "@/lib/services";
+import { getMatches } from "@/lib/services";
 import MatchesList from "@/ui/matches/matches-list";
 
 export default async function Page() {
   const matches = await getMatches();
-  const user = await getUser();
 
   if (matches.length === 0)
     return (

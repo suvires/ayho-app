@@ -14,7 +14,6 @@ import {
   PROFILE_MAX_SKILLS,
 } from "@/constants";
 import { AuthError } from "next-auth";
-import { json } from "stream/consumers";
 
 const authenticateSchema = z.object({
   email: z
@@ -259,14 +258,13 @@ export async function likeOffer(offerId: number) {
       const errorData = await res.json();
       throw new Error("API error:" + errorData.message);
     }
+
+    revalidatePath("/matches");
   } catch (error: any) {
     return {
       message: "Like offer error: " + error.message,
     };
   }
-
-  revalidatePath("/offers");
-  redirect("/offers");
 }
 
 export async function dislikeOffer(offerId: number) {
@@ -289,14 +287,12 @@ export async function dislikeOffer(offerId: number) {
       const errorData = await res.json();
       throw new Error("API error:" + errorData.message);
     }
+    revalidatePath("/matches");
   } catch (error: any) {
     return {
       message: "Dislike offer error: " + error.message,
     };
   }
-
-  revalidatePath("/offers");
-  redirect("/offers");
 }
 
 export async function undo() {
@@ -323,7 +319,6 @@ export async function undo() {
   }
 
   revalidatePath("/offers");
-  redirect("/offers");
 }
 
 const updateProfileSchema = z.object({
@@ -468,5 +463,4 @@ export async function unmatch(offerId: number) {
   }
 
   revalidatePath("/matches");
-  redirect("/matches");
 }

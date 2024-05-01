@@ -9,12 +9,10 @@ export default function OffersCards({
   user: User;
 }) {
   return (
-    <ul className="offers-cards">
+    <div className="offers-cards">
       {offers.map((offer: Offer) => (
-        <li key={offer.id}>
-          <OfferCard offer={offer} user={user} />
-        </li>
+        <OfferCard offer={offer} user={user} key={offer.id} />
       ))}
-    </ul>
+    </div>
   );
 }

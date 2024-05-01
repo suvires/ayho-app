@@ -3,15 +3,14 @@
   height: 24px;
   background-image: radial-gradient(circle, black 2px, transparent 2px);
   background-size: 100% 33.33%;
-  cursor: copy;
+  cursor: pointer;
   position: relative;
-  z-index: 1000;
   div {
     display: none;
     position: absolute;
     top: 0;
     right: 100%;
-    z-index: 1001;
+    z-index: 1000;
     margin-top: 0.5rem;
     padding: 0.5rem;
     background-color: #fff;

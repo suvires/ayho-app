@@ -14,48 +14,19 @@ interface OfferItemProps {
 }
 
 export default function OfferCard({ offer, user }: OfferItemProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef(null);
   const DECISION_THRESHOLD = 75;
 
   const handleLikeOffer = async () => {
-    if (!cardRef.current) return;
-    cardRef.current.classList.add("swipe-right");
-
-    const likeChoice = cardRef.current.querySelector(".choice.like");
-    if (likeChoice) {
-      likeChoice.classList.add("visible");
-    }
-
-    cardRef.current.addEventListener(
-      "transitionend",
-      async () => {
-        await likeOffer(offer.id);
-        // Aquí puedes agregar lógica adicional si es necesario, como actualizar el estado
-      },
-      { once: true }
-    ); // Usar { once: true } para que el listener se elimine automáticamente
-  };
-
-  const handleDislikeOffer = async () => {
-    if (!cardRef.current) return;
-
-    cardRef.current.classList.add("swipe-left");
-    const dislikeChoice = cardRef.current.querySelector(".choice.dislike");
-    if (dislikeChoice) {
-      dislikeChoice.classList.add("visible");
-    }
-    cardRef.current.addEventListener(
-      "transitionend",
-      async () => {
-        await dislikeOffer(offer.id);
-        // Aquí puedes agregar lógica adicional si es necesario
-      },
-      { once: true }
-    );
+    await likeOffer(offer.id);
   };
 
   const handleUndo = async () => {
     await undo();
+  };
+
+  const handleDislikeOffer = async () => {
+    await dislikeOffer(offer.id);
   };
 
   useEffect(() => {
@@ -69,6 +40,7 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
     ) {
       if (isAnimating) return;
 
+      // get initial position of mouse or finger
       let startX: number;
       if (event instanceof MouseEvent) {
         startX = event.clientX;
@@ -76,12 +48,15 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
         startX = event.touches[0].clientX;
       }
 
-      let dragging = false; // Nuevo estado para controlar cuándo empezar a arrastrar
-
-      const dragThreshold = 50; // Umbral en píxeles para empezar el arrastre
-
       // listen the mouse and touch movements
-      const moveHandler = (event: MouseEvent | TouchEvent) => {
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onEnd);
+
+      document.addEventListener("touchmove", onMove, { passive: true });
+      document.addEventListener("touchend", onEnd, { passive: true });
+
+      function onMove(event: MouseEvent | TouchEvent) {
+        // current position of mouse or finger
         let currentX;
         if (event instanceof MouseEvent) {
           currentX = event.clientX;
@@ -89,42 +64,52 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
           currentX = event.touches[0].clientX;
         }
 
-        const deltaX = currentX - startX;
+        // the distance between the initial and current position
+        pullDeltaX = currentX - startX;
 
-        if (!dragging && Math.abs(deltaX) > dragThreshold) {
-          dragging = true; // Comienza a arrastrar una vez que se supera el umbral
-          actualCard.style.cursor = "grabbing";
+        // there is no distance traveled in X axis
+        if (pullDeltaX === 0) return;
+
+        // change the flag to indicate we are animating
+        isAnimating = true;
+
+        // calculate the rotation of the card using the distance
+        const deg = pullDeltaX / 14;
+
+        // apply the transformation to the card
+        actualCard.style.transform = `translateX(${pullDeltaX}px) rotate(${deg}deg)`;
+
+        // change the cursor to grabbing
+        actualCard.style.cursor = "grabbing";
+
+        // change opacity of the choice info
+        const opacity = Math.abs(pullDeltaX) / 100;
+        const isRight = pullDeltaX > 0;
+
+        const choiceEl = isRight
+          ? actualCard.querySelector(".choice.like")
+          : actualCard.querySelector(".choice.dislike");
+        if (choiceEl) {
+          const choiceEl2 = choiceEl as HTMLElement;
+          choiceEl2.style.opacity = opacity.toString();
         }
+      }
 
-        if (dragging) {
-          pullDeltaX = deltaX;
-          const deg = pullDeltaX / 14;
-          actualCard.style.transform = `translateX(${pullDeltaX}px) rotate(${deg}deg)`;
+      function onEnd(event: MouseEvent | TouchEvent) {
+        // remove the event listeners
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onEnd);
 
-          const opacity = Math.abs(pullDeltaX) / 100;
-          const isRight = pullDeltaX > 0;
-          const choiceEl = isRight
-            ? actualCard.querySelector(".choice.like")
-            : actualCard.querySelector(".choice.dislike");
-          if (choiceEl) {
-            const choiceEl2 = choiceEl as HTMLElement;
-            choiceEl2.style.opacity = opacity.toString();
-          }
-        }
-      };
+        document.removeEventListener("touchmove", onMove);
+        document.removeEventListener("touchend", onEnd);
 
-      const endHandler = (event: MouseEvent | TouchEvent) => {
-        document.removeEventListener("mousemove", moveHandler);
-        document.removeEventListener("mouseup", endHandler);
-        document.removeEventListener("touchmove", moveHandler);
-        document.removeEventListener("touchend", endHandler);
-
-        if (!dragging) return; // Si no se comenzó a arrastrar, no hagas nada
-
+        // saber si el usuario tomo una decisión
         const decisionMade = Math.abs(pullDeltaX) >= DECISION_THRESHOLD;
 
         if (decisionMade) {
           const goRight = pullDeltaX >= 0;
+
+          // add class according to the decision
           actualCard.classList.add(goRight ? "go-right" : "go-left");
           actualCard.addEventListener("transitionend", () => {
             //actualCard.remove();
@@ -137,29 +122,27 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
         } else {
           actualCard.classList.add("reset");
           actualCard.classList.remove("go-right", "go-left");
+
           actualCard.querySelectorAll(".choice").forEach((choice) => {
             if (choice instanceof HTMLElement) choice.style.opacity = "0";
           });
         }
 
+        // reset the variables
         actualCard.addEventListener("transitionend", () => {
           actualCard.removeAttribute("style");
           actualCard.classList.remove("reset");
+
           pullDeltaX = 0;
           isAnimating = false;
-          actualCard.style.cursor = "";
         });
 
+        // reset the choice info opacity
         actualCard.querySelectorAll(".choice").forEach((el) => {
           const choiceEl = el as HTMLElement;
           choiceEl.style.opacity = "0";
         });
-      };
-
-      document.addEventListener("mousemove", moveHandler);
-      document.addEventListener("mouseup", endHandler);
-      document.addEventListener("touchmove", moveHandler, { passive: true });
-      document.addEventListener("touchend", endHandler, { passive: true });
+      }
     }
 
     card.addEventListener("mousedown", (event) => startDrag(event, card));

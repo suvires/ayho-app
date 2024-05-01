@@ -1,11 +1,7 @@
-import { undo } from "@/lib/actions";
-
-export const Undo = () => {
+export const Undo = ({ handleUndo }: { handleUndo: () => void }) => {
   return (
-    <form className="offer--btn-undo" action={undo}>
-      <button>
-        <span className="visually-hidden">Deshacer</span>
-      </button>
-    </form>
+    <button className="offer--btn-undo" onClick={handleUndo}>
+      <span className="visually-hidden">Deshacer</span>
+    </button>
   );
 };
