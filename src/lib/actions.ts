@@ -259,7 +259,7 @@ export async function likeOffer(offerId: number) {
       throw new Error("API error:" + errorData.message);
     }
 
-    revalidatePath("/matches");
+    //revalidatePath("/matches");
   } catch (error: any) {
     return {
       message: "Like offer error: " + error.message,
@@ -287,7 +287,7 @@ export async function dislikeOffer(offerId: number) {
       const errorData = await res.json();
       throw new Error("API error:" + errorData.message);
     }
-    revalidatePath("/matches");
+    //revalidatePath("/matches");
   } catch (error: any) {
     return {
       message: "Dislike offer error: " + error.message,
