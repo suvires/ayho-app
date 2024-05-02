@@ -35,6 +35,7 @@ export default function SignInForm() {
             type="text"
             name="email"
             placeholder="Escribe  tu email"
+            autoComplete="on"
           />
           {state.errors?.email &&
             state.errors.email.map((error: string, index: number) => (
@@ -51,6 +52,7 @@ export default function SignInForm() {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Escribe tu contraseña"
+              autoComplete="on"
             />
             <i
               className={showPassword ? "show-password" : ""}

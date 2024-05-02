@@ -35,6 +35,7 @@ export default function SignUpForm() {
             type="text"
             name="fullname"
             placeholder="Escribe tu nombre completo"
+            autoComplete="on"
           />
           {state.errors?.name &&
             state.errors.name.map((error: string, index: number) => (
@@ -51,6 +52,7 @@ export default function SignUpForm() {
             type="text"
             name="email"
             placeholder="Escribe tu email"
+            autoComplete="on"
           />
           {state.errors?.email &&
             state.errors.email.map((error: string, index: number) => (
@@ -68,6 +70,7 @@ export default function SignUpForm() {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Escribe tu contraseña"
+              autoComplete="on"
             />
             <i
               className={showPassword ? "show-password" : ""}
