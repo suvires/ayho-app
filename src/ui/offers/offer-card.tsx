@@ -78,7 +78,7 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
 
       let dragging = false; // Nuevo estado para controlar cuándo empezar a arrastrar
 
-      const dragThreshold = 50; // Umbral en píxeles para empezar el arrastre
+      const dragThreshold = 100; // Umbral en píxeles para empezar el arrastre
 
       // listen the mouse and touch movements
       const moveHandler = (event: MouseEvent | TouchEvent) => {
