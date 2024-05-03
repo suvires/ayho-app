@@ -127,7 +127,7 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
           const goRight = pullDeltaX >= 0;
           actualCard.classList.add(goRight ? "go-right" : "go-left");
           actualCard.addEventListener("transitionend", () => {
-            //actualCard.remove();
+            actualCard.remove();
             if (goRight) {
               likeOffer(offer.id);
             } else {
