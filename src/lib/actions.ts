@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { signIn } from "@/auth";
@@ -258,7 +258,6 @@ export async function likeOffer(offerId: number) {
       const errorData = await res.json();
       throw new Error("API error:" + errorData.message);
     }
-
     revalidatePath("/matches");
   } catch (error: any) {
     return {
@@ -287,7 +286,6 @@ export async function dislikeOffer(offerId: number) {
       const errorData = await res.json();
       throw new Error("API error:" + errorData.message);
     }
-    revalidatePath("/matches");
   } catch (error: any) {
     return {
       message: "Dislike offer error: " + error.message,
@@ -433,7 +431,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
       message: "Create profile error: " + error.message,
     };
   }
-  redirect("/offers");
+  redirect("/profile");
 }
 
 export async function unmatch(offerId: number) {
@@ -456,6 +454,7 @@ export async function unmatch(offerId: number) {
       const errorData = await res.json();
       throw new Error("API error:" + errorData.message);
     }
+    console.log("unmatch");
   } catch (error: any) {
     return {
       message: "Unmatch error: " + error.message,

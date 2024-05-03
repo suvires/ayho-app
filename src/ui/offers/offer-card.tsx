@@ -30,7 +30,7 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
       "transitionend",
       async () => {
         await likeOffer(offer.id);
-        // Aquí puedes agregar lógica adicional si es necesario, como actualizar el estado
+        cardRef!.current!.remove();
       },
       { once: true }
     ); // Usar { once: true } para que el listener se elimine automáticamente
@@ -48,7 +48,7 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
       "transitionend",
       async () => {
         await dislikeOffer(offer.id);
-        // Aquí puedes agregar lógica adicional si es necesario
+        cardRef!.current!.remove();
       },
       { once: true }
     );
@@ -174,7 +174,7 @@ export default function OfferCard({ offer, user }: OfferItemProps) {
   }, [offer.id]);
 
   return (
-    <div className="card" ref={cardRef}>
+    <div className="card" data-id={offer.id} ref={cardRef}>
       <div className="choice dislike">NOPE</div>
       <div className="choice like">LIKE</div>
       <article className="offer">
