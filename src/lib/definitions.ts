@@ -1,5 +1,3 @@
-import { off } from "process";
-
 export type Role = {
   id: number;
   name: string;
@@ -77,4 +75,17 @@ export type Place = {
 export type Match = {
   id: number;
   offer: Offer;
+};
+
+export type Chat = {
+  id: number;
+  offer: Offer;
+  messages: Message[];
+};
+
+export type Message = {
+  id: number;
+  sender: string;
+  content: string;
+  created_at: string;
 };

@@ -3,10 +3,46 @@
 import { auth } from "@/auth";
 import { API_ROUTES } from "@/constants";
 
+export async function getChats() {
+  const session = await auth();
+  const res = await fetch(
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_USER_CHATS}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session!.accessToken}`,
+      },
+    }
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+
+export async function getChat(chatId: string) {
+  const session = await auth();
+  const res = await fetch(
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_USER_CHAT}/${chatId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session!.accessToken}`,
+      },
+    }
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+
 export async function getMatches() {
   const session = await auth();
   const res = await fetch(
-    `${process.env.BACKEND_URL}/${API_ROUTES.GET_MATCHES}`,
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_USER_MATCHES}`,
     {
       method: "GET",
       headers: {
@@ -24,7 +60,7 @@ export async function getMatches() {
 export async function getMatch(matchId: string) {
   const session = await auth();
   const res = await fetch(
-    `${process.env.BACKEND_URL}/${API_ROUTES.GET_MATCH}/${matchId}`,
+    `${process.env.BACKEND_URL}/${API_ROUTES.GET_USER_MATCH}/${matchId}`,
     {
       method: "GET",
       headers: {

@@ -463,3 +463,56 @@ export async function unmatch(offerId: number) {
 
   revalidatePath("/matches");
 }
+
+const sendMessageSchema = z.object({
+  content: z.string().min(1, "El mensaje es obligatorio"),
+});
+
+export async function sendMessage(
+  chatId: number,
+  prevState: any,
+  formData: FormData
+) {
+  const content = formData.get("content");
+
+  const validatedFields = sendMessageSchema.safeParse({
+    content,
+  });
+
+  if (!validatedFields.success) {
+    return {
+      ...prevState,
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Revisa los errores de validación",
+    };
+  }
+
+  const session = await auth();
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/${API_ROUTES.SEND_MESSAGE}/${chatId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session!.accessToken}`,
+        },
+        body: JSON.stringify({
+          content: content,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error("API error:" + errorData.message);
+    }
+    console.log("unmatch");
+  } catch (error: any) {
+    return {
+      message: "Send message error: " + error.message,
+    };
+  }
+
+  revalidatePath(`/chats/${chatId}`);
+  return { sended: true, message: "", errors: {} };
+}

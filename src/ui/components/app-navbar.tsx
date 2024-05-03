@@ -32,10 +32,9 @@ export function AppNavbar() {
         <li>
           <Link
             className={
-              "icon-messages " +
-              (pathname.startsWith("/messages") ? "active" : "")
+              "icon-messages " + (pathname.startsWith("/chats") ? "active" : "")
             }
-            href="/messages"
+            href="/chats"
           >
             <span className="visually-hidden">Mensajes</span>
           </Link>

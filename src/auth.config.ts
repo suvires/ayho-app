@@ -17,7 +17,7 @@ export const authConfig = {
       const isOnApp =
         nextUrl.pathname.startsWith("/offers") ||
         nextUrl.pathname.startsWith("/matches") ||
-        nextUrl.pathname.startsWith("/chat") ||
+        nextUrl.pathname.startsWith("/chats") ||
         nextUrl.pathname.startsWith("/profile") ||
         nextUrl.pathname.startsWith("/create-profile") ||
         nextUrl.pathname.startsWith("/edit-profile");
