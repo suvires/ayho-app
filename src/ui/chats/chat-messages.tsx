@@ -100,5 +100,5 @@ export function ChatMessages({ chat, user }: { chat: Chat; user: User }) {
 function FormButton() {
   const { pending } = useFormStatus();
 
-  return <button aria-disabled={pending}>Send</button>;
+  return <button disabled={pending}>Send</button>;
 }

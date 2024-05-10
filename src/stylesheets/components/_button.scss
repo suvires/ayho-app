@@ -54,14 +54,14 @@
       color: #fff;
     }
 
-    // &[disabled] {
-    //   color: $mid-grey;
-    //   background: $light-grey;
+    &[disabled] {
+      color: $mid-grey;
+      background: $light-grey;
 
-    //   &:hover {
-    //     cursor: default;
-    //   }
-    // }
+      &:hover {
+        cursor: default;
+      }
+    }
   }
 
   &--secondary {
@@ -76,14 +76,14 @@
       color: $brand-color;
     }
 
-    // &[disabled] {
-    //   color: $mid-grey;
-    //   background: $light-grey;
+    &[disabled] {
+      color: $mid-grey;
+      background: $light-grey;
 
-    //   &:hover {
-    //     cursor: default;
-    //   }
-    // }
+      &:hover {
+        cursor: default;
+      }
+    }
   }
 
   &--tertiary {
