@@ -83,7 +83,7 @@ export function ChatMessages({ chat, user }: { chat: Chat; user: User }) {
             {state.message && <p className="error">{state.message}</p>}
             <div className="input">
               <textarea
-                placeholder="Type a message"
+                placeholder="Escribe tu mensaje"
                 name="content"
                 value={contentValue}
                 onChange={handleContentChange}
@@ -100,5 +100,5 @@ export function ChatMessages({ chat, user }: { chat: Chat; user: User }) {
 function FormButton() {
   const { pending } = useFormStatus();
 
-  return <button disabled={pending}>Send</button>;
+  return <button disabled={pending}>Enviar</button>;
 }
